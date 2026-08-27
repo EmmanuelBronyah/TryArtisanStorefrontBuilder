@@ -1,6 +1,8 @@
 import uuid
 from django.db import models
 from apps.users.models import CustomUser
+from apps.craft.models import Craft
+from apps.region.models import Region
 
 
 class ArtisanProfile(models.Model):
@@ -8,11 +10,9 @@ class ArtisanProfile(models.Model):
     user = models.OneToOneField(
         CustomUser, on_delete=models.CASCADE, related_name="artisan_profile"
     )
-    craft = models.ForeignKey(
-        "Craft", on_delete=models.PROTECT, related_name="artisans"
-    )
+    craft = models.ForeignKey(Craft, on_delete=models.PROTECT, related_name="artisans")
     region = models.ForeignKey(
-        "Region", on_delete=models.PROTECT, related_name="artisans"
+        Region, on_delete=models.PROTECT, related_name="artisans"
     )
     location = models.CharField(max_length=125)
 
@@ -25,27 +25,3 @@ class ArtisanProfile(models.Model):
         return (
             f"({self.user.name}) ({self.user.phone_number}) ({self.craft.craft_name})"
         )
-
-
-class Craft(models.Model):
-    craft_name = models.CharField(unique=True, max_length=125)
-
-    class Meta:
-        db_table = "crafts"
-        verbose_name = "craft"
-        verbose_name_plural = "crafts"
-
-    def __str__(self):
-        return self.craft_name
-
-
-class Region(models.Model):
-    region_name = models.CharField(unique=True, max_length=125)
-
-    class Meta:
-        db_table = "regions"
-        verbose_name = "region"
-        verbose_name_plural = "regions"
-
-    def __str__(self):
-        return self.region_name

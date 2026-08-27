@@ -2,7 +2,6 @@ from django.contrib import admin
 from django.urls import path, include
 import logging
 from django.http import JsonResponse
-from rest_framework import status
 
 logger = logging.getLogger(__name__)
 
@@ -10,6 +9,8 @@ logger = logging.getLogger(__name__)
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("users/", include("apps.users.urls")),
+    path("craft/", include("apps.craft.urls")),
+    path("region/", include("apps.region.urls")),
 ]
 
 

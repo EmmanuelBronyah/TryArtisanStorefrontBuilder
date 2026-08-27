@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from apps.users.models import CustomUser
-from apps.users.models import Craft, Region
 import logging
+from apps.region.models import Region
+from apps.craft.models import Craft
 
 logger = logging.getLogger(__name__)
 

@@ -1,5 +1,6 @@
 from rest_framework.test import APITestCase
-from apps.users.models.artisan import Craft, Region
+from apps.region.models import Region
+from apps.craft.models import Craft
 
 
 class BaseAPITestCase(APITestCase):
