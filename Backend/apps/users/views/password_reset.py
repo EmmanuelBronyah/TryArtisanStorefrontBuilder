@@ -1,0 +1,113 @@
+from rest_framework import generics
+from apps.users.serializers.password_reset import (
+    PasswordResetRequestSerializer,
+    PasswordResetVerifySerializer,
+    PasswordResetConfirmSerializer,
+)
+
+from apps.users.services.password_reset import (
+    create_reset_token,
+    validate_reset_token,
+    reset_user_password,
+)
+from apps.users.services.otp.arkesel import send_otp, ArkeselError, verify_otp
+from rest_framework import status
+import logging
+from apps.users.throttles import PasswordResetThrottle
+from rest_framework.response import Response
+from rest_framework.exceptions import NotFound
+
+logger = logging.getLogger(__name__)
+
+
+class PasswordResetRequestAPIView(generics.GenericAPIView):
+    serializer_class = PasswordResetRequestSerializer
+    throttle_classes = [PasswordResetThrottle]
+
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        try:
+            data = send_otp(serializer.validated_data["phone_number"])
+            logger.info("Verification code has been sent to user's phone number.")
+            return Response(
+                {
+                    "detail": "If an account exists with this phone number, a verification code has been sent.",
+                    "ussd_code": data.get("ussd_code"),
+                },
+                status=status.HTTP_200_OK,
+            )
+
+        except ArkeselError, NotFound:
+            logger.exception("Failed to send verification code to user's phone number.")
+            return Response(
+                {
+                    "detail": "We could not send the verification code. Please try again later."
+                },
+                status=status.HTTP_503_SERVICE_UNAVAILABLE,
+            )
+
+
+class PasswordResetVerifyAPIView(generics.GenericAPIView):
+    serializer_class = PasswordResetVerifySerializer
+    throttle_classes = [PasswordResetThrottle]
+
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        try:
+            verified = verify_otp(
+                phone_number=serializer.validated_data["phone_number"],
+                code=serializer.validated_data["code"],
+            )
+
+        except ArkeselError:
+            return Response(
+                {
+                    "detail": "We could not complete the verification. Please try again later."
+                },
+                status=status.HTTP_503_SERVICE_UNAVAILABLE,
+            )
+
+        if not verified:
+            return Response(
+                {"detail": "Invalid or expired OTP."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        token = create_reset_token(serializer.validated_data["phone_number"])
+
+        return Response({"token": token}, status=status.HTTP_200_OK)
+
+
+class PasswordResetConfirmAPIView(generics.GenericAPIView):
+    serializer_class = PasswordResetConfirmSerializer
+    throttle_classes = [PasswordResetThrottle]
+
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        verified = validate_reset_token(
+            phone_number=serializer.validated_data["phone_number"],
+            token=serializer.validated_data["token"],
+        )
+
+        if not verified:
+            return Response(
+                {
+                    "detail": "We could not complete the confirmation process. Please try again later."
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        reset_user_password(
+            phone_number=serializer.validated_data["phone_number"],
+            password=serializer.validated_data["password"],
+        )
+
+        return Response(
+            {"detail": "Password reset is successful."}, status=status.HTTP_200_OK
+        )
