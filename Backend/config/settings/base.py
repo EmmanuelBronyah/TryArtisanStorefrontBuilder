@@ -2,6 +2,7 @@ from pathlib import Path
 import environ
 
 from datetime import timedelta
+import dj_database_url
 
 env = environ.Env()
 
@@ -40,6 +41,7 @@ AUTH_USER_MODEL = "users.CustomUser"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -74,14 +76,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": env("database_name"),
-        "USER": env("database_user"),
-        "PASSWORD": env("database_password"),
-        "HOST": env("database_host"),
-        "PORT": env("database_port"),
-    }
+    "default": dj_database_url.parse(env("DATABASE_URL")),
 }
 
 REST_FRAMEWORK = {
@@ -185,4 +180,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
