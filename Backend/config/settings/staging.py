@@ -4,7 +4,7 @@ DEBUG = False
 
 LOGGING["loggers"]["apps"]["level"] = "INFO"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
