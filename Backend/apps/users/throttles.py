@@ -38,3 +38,7 @@ class PasswordResetThrottle(FormattedThrottleMixin, AnonRateThrottle):
 
 class ChangePasswordThrottle(FormattedThrottleMixin, UserRateThrottle):
     scope = "change_password"
+
+
+class LogoutThrottle(FormattedThrottleMixin, UserRateThrottle):
+    scope = "logout"

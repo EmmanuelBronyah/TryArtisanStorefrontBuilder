@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     # third party
     "corsheaders",
     "rest_framework",
+    "rest_framework_simplejwt.token_blacklist",
     "phonenumber_field",
     # local
     "apps.users",
@@ -97,6 +98,7 @@ REST_FRAMEWORK = {
         "registration": "5/hour",
         "otp": "5/hour",
         "login": "5/minute",
+        "logout": "3/minute",
         "password_reset": "5/hour",
         "change_password": "5/hour",
     },

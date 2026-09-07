@@ -4,6 +4,7 @@ from apps.users.views.user import (
     LoginView,
     VerifyOTPView,
     ResendOTPView,
+    LogoutView,
 )
 from apps.users.views.password_reset import (
     PasswordResetVerifyAPIView,
@@ -35,4 +36,5 @@ urlpatterns = [
     ),
     path("change-password/", ChangePasswordAPIView.as_view(), name="change-password"),
     path("token-refresh/", TokenRefreshView.as_view(), name="token-refresh"),
+    path("logout/", LogoutView.as_view(), name="logout"),
 ]
