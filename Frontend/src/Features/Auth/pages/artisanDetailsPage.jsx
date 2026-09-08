@@ -37,7 +37,7 @@ import { fetchCrafts, fetchRegions } from "../services/authService"
 //   "Upper West",
 // ]
 
-export default function ArtisanDetailsAuthPage({ onComplete, onBack, isSubmitting }) {
+export default function ArtisanDetailsAuthPage({ onComplete, onBack, isSubmitting, error }) {
   const [customCraft, setCustomCraft] = useState("")
   const [showCustomCraft, setShowCustomCraft] = useState(false);
   const [crafts, setCrafts] = useState([]);
@@ -129,7 +129,7 @@ export default function ArtisanDetailsAuthPage({ onComplete, onBack, isSubmittin
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
-
+          {error ? (<p className='text-xs text-red-500 mb-2'>User with this phone number exists</p>) : ""}
           {/* Craft */}
           <div>
             <label className="block text-gray-600 mb-1">

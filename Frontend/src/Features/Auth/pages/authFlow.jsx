@@ -86,6 +86,7 @@ export default function AuthFlow() {
             onComplete={handleArtisanDetailsScreen} 
             onBack={() => setStep(1)}
             isSubmitting={isSubmitting}
+            error={error}
             />
         )}
         {step === 3 && (

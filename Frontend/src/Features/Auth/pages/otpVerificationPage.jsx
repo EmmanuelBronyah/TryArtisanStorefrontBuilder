@@ -66,7 +66,7 @@ export default function OtpVerificationPage() {
     } catch (error) {
       console.log(error.response?.data?.detail);
       console.log(error.message);
-      setError("Could not verify your OTP");
+      setError(error.response?.data?.detail);
       // Clear boxes and refocus first input
       setDigits(Array(OTP_LENGTH).fill(""))
       inputRefs.current[0]?.focus()
@@ -175,7 +175,7 @@ export default function OtpVerificationPage() {
           {timerExpired ? (
             <button
               type="button"
-              onClick={() => handleResend(formatPhone(phone_number))}
+              onClick={() => handleResend(phone_number)}
               disabled={isResending}
               className="text-[#1D9E75] font-medium hover:underline disabled:opacity-50"
             >
@@ -192,7 +192,7 @@ export default function OtpVerificationPage() {
         <div className="flex items-start gap-2.5 bg-[#E1F5EE] rounded-lg px-3 py-2.5 mb-5">
           <CircleAlert className="text-[#0F6E56]" size={20}/>
           <p className="text-xs text-[#0F6E56] leading-relaxed">
-            Check your SMS inbox. Your code should arrive within a few seconds. If you don't receive it,{`you can dial ${ussdCode} to retrieve your OTP`}
+            Check your SMS inbox. Your code should arrive within a few seconds. If you don't receive it,{` you can dial ${ussdCode} to retrieve your OTP`}
           </p>
         </div>
 
