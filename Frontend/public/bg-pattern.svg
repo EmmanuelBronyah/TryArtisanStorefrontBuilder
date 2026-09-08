@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="231" height="175" viewBox="0 0 231 175">
+  <g fill="none" stroke="#c1eadc" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <!-- circular cross -->
+    <g>
+      <circle cx="22" cy="22" r="13"/>
+      <path d="M22 9v26M9 22h26"/>
+    </g>
+
+    <!-- stepped shape -->
+    <path d="M94 30h26V18h-9v-8h-13v8h-9v12z"/>
+
+    <!-- second circular cross -->
+    <g>
+      <circle cx="197" cy="22" r="13"/>
+      <path d="M197 9v26M184 22h26"/>
+    </g>
+
+    <!-- small circle + triangle -->
+    <circle cx="135.6" cy="79.5" r="5.2"/>
+    <path d="M129.5 91.5l-13.5 20h27z"/>
+
+    <!-- wave motif -->
+    <path d="M44.5 105.5c4.2-6.9 7.5-10.3 11-10.3 3.5 0 6.8 3.4 11 10.3 4.2-6.9 7.5-10.3 11-10.3 3.5 0 6.8 3.4 11 10.3"/>
+    <path d="M44.5 117.5c4.2-6.9 7.5-10.3 11-10.3 3.5 0 6.8 3.4 11 10.3 4.2-6.9 7.5-10.3 11-10.3 3.5 0 6.8 3.4 11 10.3"/>
+
+    <!-- repeating edge wave, matching the source tile -->
+    <path d="M219 105.5c4.2-6.9 7.5-10.3 11-10.3 3.5 0 6.8 3.4 11 10.3 4.2-6.9 7.5-10.3 11-10.3 3.5 0 6.8 3.4 11 10.3"/>
+    <path d="M219 117.5c4.2-6.9 7.5-10.3 11-10.3 3.5 0 6.8 3.4 11 10.3 4.2-6.9 7.5-10.3 11-10.3 3.5 0 6.8 3.4 11 10.3"/>
+  </g>
+</svg>
