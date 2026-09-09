@@ -102,6 +102,7 @@ REST_FRAMEWORK = {
         "password_reset": "5/hour",
         "change_password": "5/hour",
     },
+    "EXCEPTION_HANDLER": "apps.common.exceptions.base.custom_exception_handler",
 }
 
 SIMPLE_JWT = {
