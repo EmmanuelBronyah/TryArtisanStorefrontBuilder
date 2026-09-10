@@ -38,8 +38,7 @@ export default function ForgotPasswordPage() {
     } catch (error) {
 
       console.log("Failed to request")
-      console.error(error.message)
-      toast.error(error.response?.data?.detail || error.response?.data?.message || "Could not send OTP, try again later");
+      toast.error(error.response?.data?.detail || error.message || "Could not send OTP, try again later");
       
     }
   }

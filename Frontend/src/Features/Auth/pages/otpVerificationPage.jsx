@@ -66,7 +66,7 @@ export default function OtpVerificationPage() {
     } catch (error) {
       console.log(error.response?.data?.detail);
       console.log(error.message);
-      setError(error.response?.data?.detail || "OTP verification failed");
+      setError(error.response?.data?.detail || error.message || "OTP verification failed");
       // Clear boxes and refocus first input
       setDigits(Array(OTP_LENGTH).fill(""))
       inputRefs.current[0]?.focus()
@@ -90,7 +90,7 @@ export default function OtpVerificationPage() {
 
     } catch (err) {
       
-      setError("Could not resend your OTP");
+      setError(err.response?.data?.detail || err.message || "Could not resend your OTP");
 
     } finally {
       setIsResending(false)

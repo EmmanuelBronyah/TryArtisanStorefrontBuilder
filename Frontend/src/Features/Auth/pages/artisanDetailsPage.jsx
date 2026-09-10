@@ -38,8 +38,8 @@ import { fetchCrafts, fetchRegions } from "../services/authService"
 // ]
 
 export default function ArtisanDetailsAuthPage({ onComplete, onBack, isSubmitting, error }) {
-  const [customCraft, setCustomCraft] = useState("")
-  const [showCustomCraft, setShowCustomCraft] = useState(false);
+  // const [customCraft, setCustomCraft] = useState("")
+  // const [showCustomCraft, setShowCustomCraft] = useState(false);
   const [crafts, setCrafts] = useState([]);
   const [regions, setRegions] = useState([]);
 
@@ -47,14 +47,12 @@ export default function ArtisanDetailsAuthPage({ onComplete, onBack, isSubmittin
     async function loadOptions() {
       try {
         const craftResponse = await fetchCrafts();
-        // console.log("Crafts Response: ", craftResponse);
         setCrafts(craftResponse)
       } catch (error) {
         console.log(error)
       } 
       try {
         const regionResponse = await fetchRegions();
-        // console.log("Regions Response: ", regionResponse);
         setRegions(regionResponse);
       } catch (error) {
         console.log(error)
@@ -80,16 +78,16 @@ export default function ArtisanDetailsAuthPage({ onComplete, onBack, isSubmittin
 
   const selectedCraft = watch("craft")
 
-  function handleCraftChange(e) {
-    const value = e.target.value
-    if (value === "__other__") {
-      setShowCustomCraft(true)
-      setValue("craft", "", { shouldValidate: false })
-    } else {
-      setShowCustomCraft(false)
-      setValue("craft", value, { shouldValidate: true })
-    }
-  }
+  // function handleCraftChange(e) {
+  //   const value = e.target.value
+  //   if (value === "__other__") {
+  //     setShowCustomCraft(true)
+  //     setValue("craft", "", { shouldValidate: false })
+  //   } else {
+  //     setShowCustomCraft(false)
+  //     setValue("craft", value, { shouldValidate: true })
+  //   }
+  // }
 
   // function handleCustomCraftChange(e) {
   //   const value = e.target.value

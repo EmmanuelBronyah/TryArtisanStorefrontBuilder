@@ -60,10 +60,8 @@ export default function SetNewPasswordPage() {
       })
       
     } catch (error) {
-      const message = error.response?.data?.detail || error.response?.data?.message || "Could not reset your password, Try again"
-      toast.error(message);
+      toast.error(error.response?.data?.detail || error.message || "Could not reset your password, Try again");
     }
-    // console.log("Resetting password:", payload)
 
     // Send user to login after successful reset
     navigate("/login", {
