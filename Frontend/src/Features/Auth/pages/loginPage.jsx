@@ -15,7 +15,7 @@ export default function LoginPage() {
     const { login } = useAuth();
     const navigate = useNavigate();
 
-    const {register, handleSubmit, formState:{isSubmitting} } = useForm({
+    const {register, handleSubmit, formState:{errors, isSubmitting} } = useForm({
         resolver: zodResolver(loginSchema)
     })
 
@@ -58,7 +58,7 @@ export default function LoginPage() {
                         maxLength={10}
                         {...register("phone_number")}
                         />
-                        {/* {errors.phone_number && <p className="text-red-500 text-sm">{errors.phone_number.message}</p>} */}
+                        {errors.phone_number && <p className="text-red-500 text-sm">{errors.phone_number.message}</p>}
                     </div>
 
                     <div className="flex flex-col space-y-2">
@@ -79,7 +79,7 @@ export default function LoginPage() {
                                 {showPassword ? <EyeOff size={20} /> : <Eye size={20}/>}
                             </button>                            
                         </div>
-                        {/* {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>} */}
+                        {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
                     </div>
 
                     <div className="flex justify-end">
