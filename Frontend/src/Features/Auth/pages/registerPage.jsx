@@ -46,7 +46,7 @@ export default function RegisterPage({ onComplete, isSubmitting, error }) {
 
                 {/* Form */}
                 <form onSubmit={handleSubmit(onSubmit)} noValidate className="text-sm">
-                    {error ? (<p className='text-xs text-red-500 mb-2'>User with this phone number exists</p>) : ""}
+                    {error && <p className='text-xs text-red-500 mb-2'>{error}</p>}
                     <div className='flex flex-col space-y-2 mb-3'>
                         <label className='text-gray-600'>Full name</label>
                         <input className="border border-gray-300 text-sm p-2 rounded-lg w-full h-10 placeholder-gray-300 transition focus:ring-2 focus:ring-[#1D9E75]/20 focus:border-[#1D9E75] focus:outline-none" placeholder='Manuel De Bronya' maxLength={30} {...register("name")} />

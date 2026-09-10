@@ -15,7 +15,7 @@ export default function LoginPage() {
     const { login } = useAuth();
     const navigate = useNavigate();
 
-    const {register, handleSubmit, formState:{errors, isSubmitting} } = useForm({
+    const {register, handleSubmit, formState:{isSubmitting} } = useForm({
         resolver: zodResolver(loginSchema)
     })
 
@@ -29,10 +29,7 @@ export default function LoginPage() {
             await login({phone_number: finalData.phone_number, password: finalData.password})
             navigate("/home");
         } catch (error) {
-            // console.log(error.response?.data?.detail);
-            // console.log(error.message);
-            // toast.error(error.response?.data?.detail || "Could not login, Try again");
-            setError(true);
+            setError(error.response?.data?.detail || error.message || "Could not login, Try again");
         }
     }
 
@@ -51,7 +48,7 @@ export default function LoginPage() {
 
                 {/* Form */}
                 <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-3">
-                    {error ? (<p className='text-sm text-red-500 mb-2'>Invalid phone number or password</p>) : ""}
+                    {error && <p className='text-sm text-red-500 mb-2'>{error}</p>}
                     <div className="flex flex-col space-y-2">
                         <label className="text-gray-600">Phone number</label>
                         <input 
@@ -61,7 +58,7 @@ export default function LoginPage() {
                         maxLength={10}
                         {...register("phone_number")}
                         />
-                        {errors.phone_number && <p className="text-red-500 text-sm">{errors.phone_number.message}</p>}
+                        {/* {errors.phone_number && <p className="text-red-500 text-sm">{errors.phone_number.message}</p>} */}
                     </div>
 
                     <div className="flex flex-col space-y-2">
@@ -82,7 +79,7 @@ export default function LoginPage() {
                                 {showPassword ? <EyeOff size={20} /> : <Eye size={20}/>}
                             </button>                            
                         </div>
-                        {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+                        {/* {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>} */}
                     </div>
 
                     <div className="flex justify-end">

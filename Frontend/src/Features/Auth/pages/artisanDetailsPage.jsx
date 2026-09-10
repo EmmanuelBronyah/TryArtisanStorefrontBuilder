@@ -91,11 +91,11 @@ export default function ArtisanDetailsAuthPage({ onComplete, onBack, isSubmittin
     }
   }
 
-  function handleCustomCraftChange(e) {
-    const value = e.target.value
-    setCustomCraft(value)
-    setValue("craft", value, { shouldValidate: true })
-  }
+  // function handleCustomCraftChange(e) {
+  //   const value = e.target.value
+  //   setCustomCraft(value)
+  //   setValue("craft", value, { shouldValidate: true })
+  // }
 
   function onSubmit(data) {
     onComplete(data)
@@ -129,7 +129,7 @@ export default function ArtisanDetailsAuthPage({ onComplete, onBack, isSubmittin
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
-          {error ? (<p className='text-xs text-red-500 mb-2'>User with this phone number exists</p>) : ""}
+          {error && <p className='text-sm text-red-500 mb-2'>{error}</p>}
           {/* Craft */}
           <div>
             <label className="block text-gray-600 mb-1">
@@ -150,7 +150,7 @@ export default function ArtisanDetailsAuthPage({ onComplete, onBack, isSubmittin
             {/* Hidden RHF-bound input */}
             {/* <input type="hidden" {...register("craft")} /> */}
 
-            {showCustomCraft && (
+            {/* {showCustomCraft && (
               <input
                 type="text"
                 value={customCraft}
@@ -162,7 +162,7 @@ export default function ArtisanDetailsAuthPage({ onComplete, onBack, isSubmittin
             )}
             {errors.craft && (
               <p className="text-red-500 mt-1">{errors.craft.message}</p>
-            )}
+            )} */}
           </div>
 
           {/* Region */}

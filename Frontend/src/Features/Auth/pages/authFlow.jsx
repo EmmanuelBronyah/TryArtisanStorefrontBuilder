@@ -10,7 +10,7 @@ import toast from 'react-hot-toast'
 export default function AuthFlow() {
     const [step, setStep] = useState(1);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [error, setError] = useState(false);
+    const [error, setError] = useState("");
     const [formData, setFormData] = useState({
         name: "",
         phone_number: "",
@@ -65,8 +65,7 @@ export default function AuthFlow() {
         } catch (error) {
             console.log(error.response?.data?.phone_number);
             console.log(error.message);
-            // toast.error(error.response?.data?.phone_number || "OTP sending was unsuccessful");
-            setError(true);
+            setError(error.response?.data?.phone_number || error.message || "Could not register, try again later");
         }finally {
             setIsSubmitting(false);
         }
