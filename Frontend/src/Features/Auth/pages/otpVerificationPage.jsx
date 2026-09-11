@@ -79,14 +79,14 @@ export default function OtpVerificationPage() {
   async function handleResend(phone) {
     setIsResending(true)
     setError("")
-    setDigits(Array(OTP_LENGTH).fill(""))
-    setSecondsLeft(OTP_EXPIRY_SECONDS)
-    inputRefs.current[0]?.focus()
 
     try {
 
       const response = await resendOTP({phone_number: phone});
       if(response) toast.success('OTP has been resent to you');
+      setDigits(Array(OTP_LENGTH).fill(""))
+      setSecondsLeft(OTP_EXPIRY_SECONDS)
+      inputRefs.current[0]?.focus()      
 
     } catch (err) {
       
