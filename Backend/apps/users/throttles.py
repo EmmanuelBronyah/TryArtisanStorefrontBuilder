@@ -14,8 +14,16 @@ class LoginThrottle(FormattedThrottleMixin, AnonRateThrottle):
     scope = "login"
 
 
-class PasswordResetThrottle(FormattedThrottleMixin, AnonRateThrottle):
-    scope = "password_reset"
+class PasswordResetRequestThrottle(FormattedThrottleMixin, AnonRateThrottle):
+    scope = "password_reset_request"
+
+
+class PasswordResetVerifyThrottle(FormattedThrottleMixin, AnonRateThrottle):
+    scope = "password_reset_verify"
+
+
+class PasswordResetConfirmThrottle(FormattedThrottleMixin, AnonRateThrottle):
+    scope = "password_reset_confirm"
 
 
 class ChangePasswordThrottle(FormattedThrottleMixin, UserRateThrottle):
