@@ -13,7 +13,11 @@ from apps.users.services.password_reset import (
 from apps.users.services.otp.arkesel import send_otp, ArkeselError, verify_otp
 from rest_framework import status
 import logging
-from apps.users.throttles import PasswordResetThrottle
+from apps.users.throttles import (
+    PasswordResetRequestThrottle,
+    PasswordResetVerifyThrottle,
+    PasswordResetConfirmThrottle,
+)
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
 
@@ -22,7 +26,7 @@ logger = logging.getLogger(__name__)
 
 class PasswordResetRequestAPIView(generics.GenericAPIView):
     serializer_class = PasswordResetRequestSerializer
-    throttle_classes = [PasswordResetThrottle]
+    throttle_classes = [PasswordResetRequestThrottle]
 
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
@@ -51,7 +55,7 @@ class PasswordResetRequestAPIView(generics.GenericAPIView):
 
 class PasswordResetVerifyAPIView(generics.GenericAPIView):
     serializer_class = PasswordResetVerifySerializer
-    throttle_classes = [PasswordResetThrottle]
+    throttle_classes = [PasswordResetVerifyThrottle]
 
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
@@ -84,7 +88,7 @@ class PasswordResetVerifyAPIView(generics.GenericAPIView):
 
 class PasswordResetConfirmAPIView(generics.GenericAPIView):
     serializer_class = PasswordResetConfirmSerializer
-    throttle_classes = [PasswordResetThrottle]
+    throttle_classes = [PasswordResetConfirmThrottle]
 
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
