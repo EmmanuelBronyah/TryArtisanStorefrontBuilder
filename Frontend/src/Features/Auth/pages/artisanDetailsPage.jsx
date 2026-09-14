@@ -5,38 +5,6 @@ import { ArrowLeft } from "lucide-react"
 import { artisanDetailsSchema } from "../schemas/authSchemas"
 import { fetchCrafts, fetchRegions } from "../services/authService"
 
-// const CRAFTS = [
-//   "Kente weaving",
-//   "Bead making",
-//   "Leather work",
-//   "Pottery",
-//   "Woodcarving",
-//   "Batik / fabric dyeing",
-//   "Basket weaving",
-//   "Smock weaving",
-//   "Jewellery making",
-//   "Brass casting",
-// ]
-
-// const REGIONS = [
-//   "Greater Accra",
-//   "Ashanti",
-//   "Western",
-//   "Western North",
-//   "Eastern",
-//   "Central",
-//   "Northern",
-//   "North East",
-//   "Savannah",
-//   "Volta",
-//   "Oti",
-//   "Bono",
-//   "Bono East",
-//   "Ahafo",
-//   "Upper East",
-//   "Upper West",
-// ]
-
 export default function ArtisanDetailsAuthPage({ onComplete, onBack, isSubmitting, error }) {
   // const [customCraft, setCustomCraft] = useState("")
   // const [showCustomCraft, setShowCustomCraft] = useState(false);
@@ -77,6 +45,7 @@ export default function ArtisanDetailsAuthPage({ onComplete, onBack, isSubmittin
   })
 
   const selectedCraft = watch("craft")
+  
 
   // function handleCraftChange(e) {
   //   const value = e.target.value
@@ -88,6 +57,10 @@ export default function ArtisanDetailsAuthPage({ onComplete, onBack, isSubmittin
   //     setValue("craft", value, { shouldValidate: true })
   //   }
   // }
+  function handleCraftChange(e) {
+    const value = e.target.value
+    setValue("craft", value, { shouldValidate: true })
+  }
 
   // function handleCustomCraftChange(e) {
   //   const value = e.target.value
