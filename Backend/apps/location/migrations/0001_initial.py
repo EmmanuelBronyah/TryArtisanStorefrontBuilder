@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name="Craft",
+            name="Location",
             fields=[
                 (
                     "id",
@@ -23,12 +23,13 @@ class Migration(migrations.Migration):
                         serialize=False,
                     ),
                 ),
-                ("craft_name", models.CharField(max_length=125, unique=True)),
+                ("place_id", models.CharField()),
+                ("name", models.CharField()),
+                ("city", models.CharField()),
+                ("full_address", models.CharField()),
+                ("region", models.CharField()),
+                ("longitude", models.CharField()),
+                ("latitude", models.CharField()),
             ],
-            options={
-                "verbose_name": "craft",
-                "verbose_name_plural": "crafts",
-                "db_table": "crafts",
-            },
         ),
     ]

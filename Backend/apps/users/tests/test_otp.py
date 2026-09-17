@@ -32,13 +32,13 @@ class OtpAPITest(BaseAPITestCase):
         )
 
         response.status_code = status.HTTP_200_OK
-        response.data["access_token"] = "access_token"
-        response.data["refresh_token"] = "refresh_token"
+        response.data["access"] = "access"
+        response.data["refresh"] = "refresh"
         response.data["user"] = {}
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn("access_token", response.data)
-        self.assertIn("refresh_token", response.data)
+        self.assertIn("access", response.data)
+        self.assertIn("refresh", response.data)
         self.assertIn("user", response.data)
 
     def test_failed_resend(self):

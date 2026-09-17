@@ -1,4 +1,4 @@
-from .user import CreateUserSerializer, ReadUserSerializer
+from .user import CreateUserSerializer, ReadArtisanSerializer, ReadCustomerSerializer
 from .authentication import (
     LoginSerializer,
     VerifyOtpSerializer,

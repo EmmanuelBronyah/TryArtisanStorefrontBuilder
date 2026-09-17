@@ -1,14 +1,14 @@
 from django.db import transaction
 from apps.users.models import ArtisanProfile, CustomerProfile, CustomUser
+from apps.location.models import Location
 import logging
+from apps.users.serializers import ReadArtisanSerializer, ReadCustomerSerializer
 
 logger = logging.getLogger(__name__)
 
 
 @transaction.atomic
-def create_user(
-    *, phone_number, name, password, role, craft=None, region=None, location=None
-):
+def create_user(*, phone_number, name, password, role, craft=None, location=None):
     user = CustomUser.objects.create_user(
         phone_number=phone_number,
         name=name,
@@ -16,10 +16,12 @@ def create_user(
     )
 
     if role == "artisan":
+        location = Location.objects.create(**location)
+        logger.info(f"Location ({location.city}) ({location.full_address}) created")
+
         ArtisanProfile.objects.create(
             user=user,
             craft=craft,
-            region=region,
             location=location,
         )
         logger.info(
@@ -34,3 +36,21 @@ def create_user(
         )
 
     return user
+
+
+def get_user_data(user):
+    if hasattr(user, "artisan_profile"):
+        data = ReadArtisanSerializer(user).data
+        data["role"] = "artisan"
+
+        logger.info("User is an artisan.")
+
+        return data
+
+    elif hasattr(user, "customer_profile"):
+        data = ReadCustomerSerializer(user).data
+        data["role"] = "customer"
+
+        logger.info("User is a customer.")
+
+        return data

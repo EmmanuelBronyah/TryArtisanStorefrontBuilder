@@ -10,7 +10,7 @@ class LogoutAPITest(BaseAPITestCase):
     def setUp(self):
         self.create_user_url = reverse("create-user")
         self.logout_url = reverse("logout")
-        self.logout_data = {"refresh_token": ""}
+        self.logout_data = {"refresh": ""}
 
     def authenticate_user(self, user):
         self.client.force_authenticate(user=user)
@@ -21,13 +21,13 @@ class LogoutAPITest(BaseAPITestCase):
 
         # create refresh token
         user = CustomUser.objects.get(phone_number="+233554089218")
-        refresh_token = RefreshToken.for_user(user)
+        refresh = RefreshToken.for_user(user)
 
         # authenticate user
         self.authenticate_user(user)
 
         # logout
-        self.logout_data["refresh_token"] = str(refresh_token)
+        self.logout_data["refresh"] = str(refresh)
         response = self.client.post(self.logout_url, self.logout_data, format="json")
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -39,7 +39,7 @@ class LogoutAPITest(BaseAPITestCase):
 
         # create refresh token
         user = CustomUser.objects.get(phone_number="+233554089218")
-        refresh_token = RefreshToken.for_user(user)
+        refresh = RefreshToken.for_user(user)
 
         # authenticate user
         self.authenticate_user(user)
@@ -48,8 +48,8 @@ class LogoutAPITest(BaseAPITestCase):
         response = self.client.post(self.logout_url, self.logout_data, format="json")
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn("refresh_token", response.data)
-        self.assertIn("This field may not be blank.", response.data["refresh_token"])
+        self.assertIn("refresh", response.data)
+        self.assertIn("This field may not be blank.", response.data["refresh"])
 
     def test_invalid_credentials(self):
         # create user
@@ -60,7 +60,7 @@ class LogoutAPITest(BaseAPITestCase):
         self.authenticate_user(user)
 
         # logout
-        self.logout_data["refresh_token"] = "etyngddhdjsl"
+        self.logout_data["refresh"] = "etyngddhdjsl"
         response = self.client.post(self.logout_url, self.logout_data, format="json")
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -73,12 +73,12 @@ class LogoutAPITest(BaseAPITestCase):
         for _ in range(6):
             # create refresh token
             user = CustomUser.objects.get(phone_number="+233554089218")
-            refresh_token = RefreshToken.for_user(user)
+            refresh = RefreshToken.for_user(user)
 
             # authenticate user
             self.authenticate_user(user)
 
-            self.logout_data["refresh_token"] = str(refresh_token)
+            self.logout_data["refresh"] = str(refresh)
             response = self.client.post(
                 self.logout_url, self.logout_data, format="json"
             )

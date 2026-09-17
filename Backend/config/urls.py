@@ -10,7 +10,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("users/", include("apps.users.urls")),
     path("craft/", include("apps.craft.urls")),
-    path("region/", include("apps.region.urls")),
 ]
 
 

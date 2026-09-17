@@ -1,7 +1,6 @@
 from rest_framework import generics
 from apps.users.serializers import (
     CreateUserSerializer,
-    ReadUserSerializer,
     LoginSerializer,
     VerifyOtpSerializer,
     ResendOtpSerializer,
@@ -10,7 +9,7 @@ from apps.users.serializers import (
 from apps.users.models import CustomUser
 from rest_framework.response import Response
 from rest_framework import status
-from apps.users.services.user import create_user
+from apps.users.services.user import create_user, get_user_data
 from apps.users.services.authentication import (
     authenticate_user,
     generate_tokens_for_user,
@@ -49,7 +48,7 @@ class LoginView(generics.GenericAPIView):
                 status=status.HTTP_401_UNAUTHORIZED,
             )
 
-        user = ReadUserSerializer(user).data
+        user = get_user_data(user)
 
         return Response(
             {
@@ -120,7 +119,7 @@ class VerifyOTPView(generics.GenericAPIView):
             serializer.validated_data["phone_number"]
         )
 
-        user = ReadUserSerializer(user).data
+        user = get_user_data(user)
 
         return Response(
             {

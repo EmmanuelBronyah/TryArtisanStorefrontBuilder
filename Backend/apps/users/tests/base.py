@@ -1,6 +1,6 @@
 from rest_framework.test import APITestCase
-from apps.region.models import Region
 from apps.craft.models import Craft
+from apps.location.models import Location
 
 
 class BaseAPITestCase(APITestCase):
@@ -8,15 +8,22 @@ class BaseAPITestCase(APITestCase):
     @classmethod
     def setUpTestData(cls):
         cls.craft = Craft.objects.create(craft_name="Plumber")
-        cls.region = Region.objects.create(region_name="Greater Accra Region")
+        cls.location = Location.objects.create()
 
         cls.artisan_data = {
             "name": "test artisan",
             "phone_number": "+233554089218",
             "password": "lovesogreat",
             "craft": cls.craft.id,
-            "region": cls.region.id,
-            "location": "Amasaman",
+            "location": {
+                "place_id": "ty789",
+                "name": "Amasaman North",
+                "city": "Accra",
+                "full_address": "Amasaman",
+                "region": "Greater Accra",
+                "longitude": "12345",
+                "latitude": "5678",
+            },
             "role": "artisan",
         }
 

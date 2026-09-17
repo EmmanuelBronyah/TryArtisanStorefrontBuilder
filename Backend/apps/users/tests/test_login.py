@@ -23,9 +23,11 @@ class LoginAPITest(BaseAPITestCase):
         response = self.client.post(self.login_url, self.login_data, format="json")
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn("access_token", response.data)
-        self.assertIn("refresh_token", response.data)
+        self.assertIn("access", response.data)
+        self.assertIn("refresh", response.data)
         self.assertIn("user", response.data)
+        self.assertIn("location", response.data["user"])
+        self.assertIn("name", response.data["user"]["location"])
 
     def test_omit_required_field(self):
         login_data_copy = self.login_data.copy()

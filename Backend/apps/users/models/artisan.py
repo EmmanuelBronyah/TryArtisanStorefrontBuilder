@@ -2,7 +2,7 @@ import uuid
 from django.db import models
 from apps.users.models import CustomUser
 from apps.craft.models import Craft
-from apps.region.models import Region
+from apps.location.models import Location
 
 
 class ArtisanProfile(models.Model):
@@ -11,10 +11,9 @@ class ArtisanProfile(models.Model):
         CustomUser, on_delete=models.CASCADE, related_name="artisan_profile"
     )
     craft = models.ForeignKey(Craft, on_delete=models.PROTECT, related_name="artisans")
-    region = models.ForeignKey(
-        Region, on_delete=models.PROTECT, related_name="artisans"
+    location = models.OneToOneField(
+        Location, on_delete=models.PROTECT, related_name="artisans"
     )
-    location = models.CharField(max_length=125)
 
     class Meta:
         db_table = "artisan_profiles"

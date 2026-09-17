@@ -1,5 +1,5 @@
 from rest_framework.exceptions import Throttled
-from apps.users.utils import format_wait_time
+from apps.utils import format_wait_time
 
 
 class FormattedThrottleMixin:

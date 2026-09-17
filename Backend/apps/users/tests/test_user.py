@@ -49,6 +49,15 @@ class CreateUserAPITest(BaseAPITestCase):
         self.assertIn("location", response.data)
         self.assertIn("This field may not be blank.", response.data["location"])
 
+    def test_omit_required_location_field(self):
+        user_data_copy = self.artisan_data.copy()
+        user_data_copy["location"]["name"] = ""
+
+        response = self.client.post(self.create_user_url, user_data_copy, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("This field is required.", response.data["name"])
+
     def test_throttling(self):
         for _ in range(6):
             response = self.client.post(
