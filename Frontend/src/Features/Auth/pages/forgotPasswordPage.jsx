@@ -5,6 +5,7 @@ import { useNavigate, Link } from "react-router"
 import { forgotPasswordSchema } from "../schemas/authSchemas"
 import { requestPasswordReset } from "../services/authService"
 import toast from "react-hot-toast"
+import { getFriendlyErrorMessage } from "../../../utils/getFriendlyErrorMessage"
 
 export default function ForgotPasswordPage() {
   const navigate = useNavigate()
@@ -36,9 +37,9 @@ export default function ForgotPasswordPage() {
       })
 
     } catch (error) {
-
-      console.log("Failed to request")
-      toast.error(error.response?.data?.detail || error.message || "Could not send OTP, try again later");
+      console.log(error.response?.data?.detail)
+      console.log(error.message)
+      toast.error(getFriendlyErrorMessage(error));
       
     }
   }

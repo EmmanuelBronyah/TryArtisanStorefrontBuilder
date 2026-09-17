@@ -8,6 +8,7 @@ import { formatPhone } from "../utils/utils"
 import { useAuth } from "../context/AuthContext"
 import { useNavigate } from "react-router"
 import toast from "react-hot-toast"
+import { getFriendlyErrorMessage } from "../../../utils/getFriendlyErrorMessage"
 
 export default function LoginPage() {
     const [showPassword, setShowPassword] = useState(false);
@@ -29,7 +30,7 @@ export default function LoginPage() {
             await login({phone_number: finalData.phone_number, password: finalData.password})
             navigate("/home");
         } catch (error) {
-            setError(error.response?.data?.detail || error.message || "Could not login, Try again");
+            setError(getFriendlyErrorMessage(error));
         }
     }
 

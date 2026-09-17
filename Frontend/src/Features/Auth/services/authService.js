@@ -41,10 +41,10 @@ export const fetchCrafts = async () => {
     return data;
 }
 
-export const fetchRegions = async () => {
-    const data = await api.get('/region/all/');
-    return data;
-}
+// export const fetchRegions = async () => {
+//     const data = await api.get('/region/all/');
+//     return data;
+// }
 
 export const changePassword = async (userData) => {
     const data = await api.post('/users/change-password/', userData)

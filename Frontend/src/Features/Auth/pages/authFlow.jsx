@@ -6,6 +6,7 @@ import { useNavigate } from "react-router";
 import { useAuth } from "../context/AuthContext";
 import { formatPhone } from "../utils/utils"; 
 import toast from 'react-hot-toast'
+import { getFriendlyErrorMessage } from "../../../utils/getFriendlyErrorMessage";
 
 export default function AuthFlow() {
     const [step, setStep] = useState(1);
@@ -16,9 +17,8 @@ export default function AuthFlow() {
         phone_number: "",
         password: "",
         role: "",
-        craft: "",
-        region: "",
-        location: ""
+        // craft: "",
+        // location: ""
     })
 
     const navigate = useNavigate();
@@ -53,6 +53,7 @@ export default function AuthFlow() {
         }
 
         try {   
+            console.log("Final Data", finalData);
             const response = await register(finalData);
             toast.success(response.detail || 'Otp has been sent to your phone')
             navigate("/verify-otp", {
@@ -65,7 +66,7 @@ export default function AuthFlow() {
         } catch (error) {
             console.log(error.response?.data?.phone_number);
             console.log(error.message);
-            setError(error.response?.data?.phone_number || error.message || "Could not register, try again later");
+            setError(getFriendlyErrorMessage(error));
         }finally {
             setIsSubmitting(false);
         }

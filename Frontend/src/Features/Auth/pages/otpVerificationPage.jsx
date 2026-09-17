@@ -2,9 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router";
 import { ArrowLeft, MessageSquareCheck, CircleAlert, Clock } from "lucide-react";
 import { resendOTP, verifyPasswordReset } from "../services/authService";
-import { formatPhone, formatTime, handleKeyDown, handlePaste, handleDigitChange } from "../utils/utils"
+import { formatTime, handleKeyDown, handlePaste, handleDigitChange } from "../utils/utils"
 import { useAuth } from "../context/AuthContext";
 import toast from 'react-hot-toast'
+import { getFriendlyErrorMessage } from "../../../utils/getFriendlyErrorMessage";
 
 const OTP_LENGTH = 6
 const OTP_EXPIRY_SECONDS = 2 * 60 // 2 minutes
@@ -18,12 +19,36 @@ export default function OtpVerificationPage() {
   const { phone_number = "", purpose = "", ussdCode = "" } = location.state || {}
 
   const [digits, setDigits] = useState(Array(OTP_LENGTH).fill(""))
-  const [secondsLeft, setSecondsLeft] = useState(OTP_EXPIRY_SECONDS)
   const [isVerifying, setIsVerifying] = useState(false)
   const [isResending, setIsResending] = useState(false)
   const [error, setError] = useState("")
-
   const inputRefs = useRef([])
+  const STORAGE_KEY = `otp_expiry_${phone_number}`
+  const [secondsLeft, setSecondsLeft] = useState(() => {
+    const saved = sessionStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      const remaining = Math.ceil((Number(saved) - Date.now()) / 1000)
+      return remaining > 0 ? remaining : 0
+    }
+
+    const expiry = Date.now() + OTP_EXPIRY_SECONDS * 1000
+    sessionStorage.setItem(STORAGE_KEY, String(expiry))
+    return OTP_EXPIRY_SECONDS  
+  })
+
+  useEffect(() => {
+    if (secondsLeft <= 0) return
+
+    const interval = setInterval(() => {
+      const saved = sessionStorage.getItem(STORAGE_KEY)
+      if (!saved) return
+      const remaining = Math.ceil((Number(saved) - Date.now()) / 1000)
+      setSecondsLeft(remaining > 0 ? remaining : 0)
+    }, 1000)
+
+    return () => clearInterval(interval)
+  }, [secondsLeft])
+
 
   // Focus first box on mount
   useEffect(() => {
@@ -63,10 +88,11 @@ export default function OtpVerificationPage() {
         navigate("/home");
 
       }
+      sessionStorage.removeItem(STORAGE_KEY)
     } catch (error) {
       console.log(error.response?.data?.detail);
       console.log(error.message);
-      setError(error.response?.data?.detail || error.message || "OTP verification failed");
+      setError(getFriendlyErrorMessage(error));
       // Clear boxes and refocus first input
       setDigits(Array(OTP_LENGTH).fill(""))
       inputRefs.current[0]?.focus()
@@ -84,13 +110,16 @@ export default function OtpVerificationPage() {
 
       const response = await resendOTP({phone_number: phone});
       if(response) toast.success('OTP has been resent to you');
+      const expiry = Date.now() + OTP_EXPIRY_SECONDS * 1000
+      sessionStorage.setItem(STORAGE_KEY, String(expiry))
       setDigits(Array(OTP_LENGTH).fill(""))
       setSecondsLeft(OTP_EXPIRY_SECONDS)
       inputRefs.current[0]?.focus()      
-
-    } catch (err) {
-      
-      setError(err.response?.data?.detail || err.message || "Could not resend your OTP");
+      sessionStorage.removeItem(STORAGE_KEY)
+    } catch (error) {
+      console.log(error.response?.data?.detail)
+      console.log(error.message);
+      setError(getFriendlyErrorMessage(error));
 
     } finally {
       setIsResending(false)

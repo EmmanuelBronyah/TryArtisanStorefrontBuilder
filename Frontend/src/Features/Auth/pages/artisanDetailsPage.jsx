@@ -1,27 +1,22 @@
 import { useEffect, useState } from "react"
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ArrowLeft } from "lucide-react"
 import { artisanDetailsSchema } from "../schemas/authSchemas"
-import { fetchCrafts, fetchRegions } from "../services/authService"
+import { fetchCrafts } from "../services/authService"
+import LocationAutocomplete  from "../../../components/LocationAutocomplete"
 
 export default function ArtisanDetailsAuthPage({ onComplete, onBack, isSubmitting, error }) {
   // const [customCraft, setCustomCraft] = useState("")
   // const [showCustomCraft, setShowCustomCraft] = useState(false);
   const [crafts, setCrafts] = useState([]);
-  const [regions, setRegions] = useState([]);
+  // const [regions, setRegions] = useState([]);
 
   useEffect(() => {
     async function loadOptions() {
       try {
         const craftResponse = await fetchCrafts();
         setCrafts(craftResponse)
-      } catch (error) {
-        console.log(error)
-      } 
-      try {
-        const regionResponse = await fetchRegions();
-        setRegions(regionResponse);
       } catch (error) {
         console.log(error)
       }            
@@ -32,19 +27,17 @@ export default function ArtisanDetailsAuthPage({ onComplete, onBack, isSubmittin
   const {
     register,
     handleSubmit,
-    setValue,
-    watch,
+    control,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(artisanDetailsSchema),
     defaultValues: {
       craft: "",
-      region: "",
-      location: "",
+      location: null,
     },
   })
 
-  const selectedCraft = watch("craft")
+  // const selectedCraft = watch("craft")
   
 
   // function handleCraftChange(e) {
@@ -57,10 +50,10 @@ export default function ArtisanDetailsAuthPage({ onComplete, onBack, isSubmittin
   //     setValue("craft", value, { shouldValidate: true })
   //   }
   // }
-  function handleCraftChange(e) {
-    const value = e.target.value
-    setValue("craft", value, { shouldValidate: true })
-  }
+  // function handleCraftChange(e) {
+  //   const value = e.target.value
+  //   setValue("craft", value, { shouldValidate: true })
+  // }
 
   // function handleCustomCraftChange(e) {
   //   const value = e.target.value
@@ -69,6 +62,7 @@ export default function ArtisanDetailsAuthPage({ onComplete, onBack, isSubmittin
   // }
 
   function onSubmit(data) {
+    console.log(data.location)
     onComplete(data)
   }
 
@@ -99,7 +93,10 @@ export default function ArtisanDetailsAuthPage({ onComplete, onBack, isSubmittin
           <div className="h-1 flex-1 rounded-full bg-gray-200" />
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit,(errors) => {
+      console.log("FORM VALIDATION ERRORS:", errors);
+    }
+  )} noValidate className="space-y-4">
           {error && <p className='text-sm text-red-500 mb-2'>{error}</p>}
           {/* Craft */}
           <div>
@@ -107,7 +104,11 @@ export default function ArtisanDetailsAuthPage({ onComplete, onBack, isSubmittin
               Craft type
             </label>
             <select
-              onChange={handleCraftChange}
+              // onChange={handleCraftChange}
+              {...register("craft")}
+              onChange={(e) => {
+                console.log("CRAFT SELECT VALUE:", e.target.value)
+              }}              
               defaultValue=""
               className="w-full h-11 px-3 rounded-lg border border-gray-300 text-gray-900 bg-white outline-none transition
                 focus:ring-2 focus:ring-[#1D9E75]/20 focus:border-[#1D9E75]"
@@ -118,6 +119,11 @@ export default function ArtisanDetailsAuthPage({ onComplete, onBack, isSubmittin
                 <option key={craft.id} value={craft.id}>{craft.craft_name}</option>
               ))}
             </select>
+
+            {errors.craft && (
+              <p className="text-red-500 mt-1">{errors.craft.message}</p>
+            )}            
+            
             {/* Hidden RHF-bound input */}
             {/* <input type="hidden" {...register("craft")} /> */}
 
@@ -137,7 +143,7 @@ export default function ArtisanDetailsAuthPage({ onComplete, onBack, isSubmittin
           </div>
 
           {/* Region */}
-          <div>
+          {/* <div>
             <label className="block text-gray-600 mb-1">
               Region
             </label>
@@ -155,20 +161,25 @@ export default function ArtisanDetailsAuthPage({ onComplete, onBack, isSubmittin
             {errors.region && (
               <p className="text-red-500 mt-1">{errors.region.message}</p>
             )}
-          </div>
+          </div> */}
 
           {/* Location */}
           <div>
             <label className="block text-gray-600 mb-1">
               Location / area
             </label>
-            <input
-              {...register("location")}
-              type="text"
-              placeholder="e.g. Makola, Kumasi Central"
-              className="w-full h-11 px-3 rounded-lg border border-gray-300 text-gray-900 placeholder-gray-400 outline-none transition
-                focus:ring-2 focus:ring-[#1D9E75]/20 focus:border-[#1D9E75]"
-            />
+
+          <Controller
+            name="location"
+            control={control}
+            render={({ field }) => (
+              <LocationAutocomplete
+                value={field.value}
+                onChange={field.onChange}
+              />
+            )}
+          />
+
             {errors.location && (
               <p className="text-red-500 mt-1">{errors.location.message}</p>
             )}

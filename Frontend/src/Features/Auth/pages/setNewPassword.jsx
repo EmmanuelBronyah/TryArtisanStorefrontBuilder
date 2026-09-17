@@ -6,15 +6,9 @@ import { setPasswordSchema } from "../schemas/authSchemas"
 import { useNavigate, useLocation } from "react-router"
 import { confirmPasswordReset } from "../services/authService"
 import toast from "react-hot-toast"
+import { getFriendlyErrorMessage } from "../../../utils/getFriendlyErrorMessage"
 
-/**
- * SetNewPasswordPage
- *
- * Expects to receive via React Router location.state:
- *   - phone {string} The raw phone number (024...) — passed from OtpVerificationPage
- *
- * After a successful password reset, navigates the user to login.
- */
+
 export default function SetNewPasswordPage() {
   const navigate = useNavigate()
   const location = useLocation()
@@ -60,7 +54,9 @@ export default function SetNewPasswordPage() {
       })
       
     } catch (error) {
-      toast.error(error.response?.data?.detail || error.message || "Could not reset your password, Try again");
+      console.log(error.response?.data?.detail)
+      console.log(error.message)
+      toast.error(getFriendlyErrorMessage(error));
     }
 
     // Send user to login after successful reset

@@ -35,20 +35,23 @@ export const registerSchema = z
   })
 
 export const artisanDetailsSchema = z.object({
-  craft: z.coerce
-  .number({invalid_type_error: "Select or enter your craft"})
-  .int()
-  .positive("Select or enter your craft"),
-
-  region: z.coerce
-  .number({invalid_type_error: "Select or enter your craft"})
-  .int()
-  .positive("Select or enter your craft"),
+  craft: z
+  .string()
+  .min(1, "Select your craft"),
   
-  location: z
-    .string()
-    .min(2, "Enter your area or town")
-    .max(80, "Location is too long"),
+  location: z.object({
+    full_address: z.string(),
+    name: z.string().optional(),
+    city: z.string().optional(),
+    region: z.string().optional(),
+    place_id: z.string(),
+    latitude: z.number(),
+    longitude: z.number(),
+  })
+  .nullable()
+  .refine((value) => value !== null, {
+    message: "Location is required"
+  } )
 })
 
 export const loginSchema = z.object({
